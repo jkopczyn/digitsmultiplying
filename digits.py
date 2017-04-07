@@ -59,8 +59,44 @@ def clever_product(fourlist, full_list):
                 c = fourlist.pop()
     else:
         b = temp
-        #placeholder
-        a,c,d = fourlist
+        temp = fourlist.pop()
+        total -= temp
+        l -= 1
+        if temp <= total/l:
+            if temp <= total/(2*l):
+                c = temp
+                temp = fourlist.pop()
+                total -= temp
+                l -= 1
+                if temp <= total/l:
+                    a = temp
+                    d = fourlist.pop()
+                else:
+                    d = temp
+                    a = fourlist.pop()
+            else:
+                a = temp
+                temp = fourlist.pop()
+                total -= temp
+                l -= 1
+                if temp <= total/l:
+                    c = temp
+                    d = fourlist.pop()
+                else:
+                    d = temp
+                    c = fourlist.pop()
+        else:
+            d = temp
+            temp = fourlist.pop()
+            total -= temp
+            l -= 1
+            #this is xor
+            if set([temp <= total/l, d < b]) == set([True, False]):
+                a = temp
+                c = fourlist.pop()
+            else:
+                c = temp
+                a = fourlist.pop()
     print a, b, c, d
     return random_product([a,b,c,d])
 
