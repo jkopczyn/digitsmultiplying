@@ -1,9 +1,10 @@
+import itertools
 
 def gen_foursets(iterable):
-    pass
+    return itertools.combinations(iterable, 4)
 
 def fourset_permutations(fourset):
-    pass
+    return itertools.permutations(fourset)
 
 def random_product(fourlist):
     pass
