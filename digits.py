@@ -10,45 +10,37 @@ def random_product(fourlist):
     a,b,c,d = fourlist
     return (10*a+b) * (10*c+d)
 
-def percentian(item, lst, QUARTILE=0.25):
-    place = next((i for i,v in enumerate(lst) if v >= item),
-            len(lst)) * 1.0/len(lst)
-    #0,1,2,3 => 'quartile', split by median and then by QUARTILEs away from med.
-    if place < 0.5-QUARTILE:
-        return 0
-    elif place < 0.5:
-        return 1
-    elif place < 0.5+QUARTILE:
-        return 2
-    else:
-        return 3
-
-
-def clever_product(fourlist, full_list, QUARTILE=0.25):
-    full_list = full_list[:]
+def clever_product(fourlist, full_list, QUARTILE=0.5):
     fourlist = list(fourlist)
+    total = sum(full_list)
+    l = len(full_list)
+    a=b=c=d=None
     temp = fourlist.pop()
-    full_list.remove(temp)
-    if percentian(temp, full_list, QUARTILE) in [0,1]:
+    total -= temp
+    l -= 1
+    if temp <= total/l:
         a = temp
         temp = fourlist.pop()
-        full_list.remove(temp)
-        if percentian(temp, full_list, QUARTILE) in [0,1]:
+        total -= temp
+        l -= 1
+        if temp <= total/l:
             c = temp
             temp = fourlist.pop()
-            full_list.remove(temp)
+            total -= temp
+            l -= 1
             #this is xor
-            if set([percentian(temp, full_list, QUARTILE) in [0,1], c < a]) == set([True, False]):
+            if set([temp <= total/l, c < a]) == set([True, False]):
                 d = temp
                 b = fourlist.pop()
             else:
                 b = temp
                 d = fourlist.pop()
-        elif percentian(temp, full_list, QUARTILE) == 2:
+        elif temp <= (1 + QUARTILE)*total/l:
             b = temp
             temp = fourlist.pop()
-            full_list.remove(temp)
-            if percentian(temp, full_list, QUARTILE) in [0,1]:
+            total -= temp
+            l -= 1
+            if temp <= total/l:
                 c = temp
                 d = fourlist.pop()
             else:
@@ -57,8 +49,9 @@ def clever_product(fourlist, full_list, QUARTILE=0.25):
         else:
             d = temp
             temp = fourlist.pop()
-            full_list.remove(temp)
-            if percentian(temp, full_list, QUARTILE) in [0,1]:
+            total -= temp
+            l -= 1
+            if temp <= total/l:
                 c = temp
                 b = fourlist.pop()
             else:
@@ -67,13 +60,15 @@ def clever_product(fourlist, full_list, QUARTILE=0.25):
     else:
         b = temp
         temp = fourlist.pop()
-        full_list.remove(temp)
-        if percentian(temp, full_list, QUARTILE) in [0,1]:
-            if percentian(temp, full_list, QUARTILE) == 1:
+        total -= temp
+        l -= 1
+        if temp <= total/l:
+            if temp <= (1 - QUARTILE)*total/l:
                 c = temp
                 temp = fourlist.pop()
-                full_list.remove(temp)
-                if percentian(temp, full_list, QUARTILE) in [0,1]:
+                total -= temp
+                l -= 1
+                if temp <= total/l:
                     a = temp
                     d = fourlist.pop()
                 else:
@@ -82,8 +77,9 @@ def clever_product(fourlist, full_list, QUARTILE=0.25):
             else:
                 a = temp
                 temp = fourlist.pop()
-                full_list.remove(temp)
-                if percentian(temp, full_list, QUARTILE) in [0,1]:
+                total -= temp
+                l -= 1
+                if temp <= total/l:
                     c = temp
                     d = fourlist.pop()
                 else:
@@ -92,9 +88,10 @@ def clever_product(fourlist, full_list, QUARTILE=0.25):
         else:
             d = temp
             temp = fourlist.pop()
-            full_list.remove(temp)
+            total -= temp
+            l -= 1
             #this is xor
-            if set([percentian(temp, full_list, QUARTILE) in [0,1], d < b]) == set([True, False]):
+            if set([temp <= total/l, d < b]) == set([True, False]):
                 a = temp
                 c = fourlist.pop()
             else:
