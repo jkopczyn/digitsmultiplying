@@ -11,23 +11,18 @@ def random_product(fourlist):
     return (10*a+b) * (10*c+d)
 
 def clever_product(fourlist, full_list, QUARTILE=0.5):
+    full_list = full_list[:]
     fourlist = list(fourlist)
-    total = sum(full_list)
-    l = len(full_list)
-    a=b=c=d=None
     temp = fourlist.pop()
-    total -= temp
-    l -= 1
+    full_list.remove(temp)
     if temp <= total/l:
         a = temp
         temp = fourlist.pop()
-        total -= temp
-        l -= 1
+        full_list.remove(temp)
         if temp <= total/l:
             c = temp
             temp = fourlist.pop()
-            total -= temp
-            l -= 1
+            full_list.remove(temp)
             #this is xor
             if set([temp <= total/l, c < a]) == set([True, False]):
                 d = temp
@@ -38,8 +33,7 @@ def clever_product(fourlist, full_list, QUARTILE=0.5):
         elif temp <= (1 + QUARTILE)*total/l:
             b = temp
             temp = fourlist.pop()
-            total -= temp
-            l -= 1
+            full_list.remove(temp)
             if temp <= total/l:
                 c = temp
                 d = fourlist.pop()
@@ -49,8 +43,7 @@ def clever_product(fourlist, full_list, QUARTILE=0.5):
         else:
             d = temp
             temp = fourlist.pop()
-            total -= temp
-            l -= 1
+            full_list.remove(temp)
             if temp <= total/l:
                 c = temp
                 b = fourlist.pop()
@@ -60,14 +53,12 @@ def clever_product(fourlist, full_list, QUARTILE=0.5):
     else:
         b = temp
         temp = fourlist.pop()
-        total -= temp
-        l -= 1
+        full_list.remove(temp)
         if temp <= total/l:
             if temp <= (1 - QUARTILE)*total/l:
                 c = temp
                 temp = fourlist.pop()
-                total -= temp
-                l -= 1
+                full_list.remove(temp)
                 if temp <= total/l:
                     a = temp
                     d = fourlist.pop()
@@ -77,8 +68,7 @@ def clever_product(fourlist, full_list, QUARTILE=0.5):
             else:
                 a = temp
                 temp = fourlist.pop()
-                total -= temp
-                l -= 1
+                full_list.remove(temp)
                 if temp <= total/l:
                     c = temp
                     d = fourlist.pop()
@@ -88,8 +78,7 @@ def clever_product(fourlist, full_list, QUARTILE=0.5):
         else:
             d = temp
             temp = fourlist.pop()
-            total -= temp
-            l -= 1
+            full_list.remove(temp)
             #this is xor
             if set([temp <= total/l, d < b]) == set([True, False]):
                 a = temp
